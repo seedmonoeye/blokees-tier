@@ -11,7 +11,6 @@
     --S:#ff4d6d; --A:#ff9f43; --B:#ffd93d; --C:#6bcb77; --D:#4d96ff;
   }
   *{box-sizing:border-box}
-  [hidden]{display:none !important}
   body{
     margin:0; font-family:'Kanit',sans-serif; color:var(--text);
     background:radial-gradient(circle at top,#1b2440 0%,var(--bg) 60%); min-height:100vh;
@@ -25,7 +24,6 @@
   main{max-width:1200px; margin:0 auto; padding:16px}
   h2{font-family:'Bebas Neue'; letter-spacing:1px; margin:20px 0 8px; font-size:26px}
 
-  /* Tabs */
   nav.tabs{display:flex; justify-content:center; gap:8px; margin:14px 0 0}
   .tab{
     padding:9px 22px; border-radius:999px; border:1px solid var(--line); background:transparent;
@@ -34,7 +32,6 @@
   .tab.active{background:var(--accent); color:#111; border-color:var(--accent)}
   .view{display:none} .view.active{display:block}
 
-  /* Action bar */
   .actionbar{
     display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
     margin:12px 0; padding:12px 14px; background:var(--panel); border:1px solid var(--line); border-radius:10px;
@@ -42,7 +39,6 @@
   .actionbar .group{display:flex; gap:8px; flex-wrap:wrap}
   #status, #resultsMeta{font-size:14px; opacity:.85}
 
-  /* Tier rows */
   .tier{
     display:flex; min-height:120px; margin-bottom:6px; background:var(--panel);
     border:1px solid var(--line); border-radius:10px; overflow:hidden;
@@ -54,13 +50,8 @@
   .tier-label.small{font-size:22px; color:#fff}
   .tier-drop{flex:1; display:flex; flex-wrap:wrap; gap:8px; padding:8px; align-content:flex-start}
   .tier-drop.over, .tier.highlight .tier-drop{background:rgba(255,204,0,.08); outline:2px dashed var(--accent)}
+  #pool{min-height:140px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px}
 
-  #pool{
-    min-height:140px; background:var(--panel); border:1px solid var(--line);
-    border-radius:10px; padding:10px;
-  }
-
-  /* Cards */
   .card{
     width:110px; background:#1e2640; border:2px solid transparent; border-radius:8px;
     overflow:hidden; cursor:grab; user-select:none; position:relative; transition:transform .15s, border-color .15s;
@@ -73,25 +64,15 @@
   .card .info{padding:4px 6px; font-size:12px; line-height:1.25}
   .card .no{color:var(--accent); font-family:'Bebas Neue'; font-size:15px}
   .card .stat{margin-top:2px; font-size:11px; color:var(--accent); opacity:.9}
-  .card .del{
-    position:absolute; top:3px; right:3px; width:22px; height:22px; border:none; border-radius:50%;
-    background:rgba(0,0,0,.75); color:#fff; font-size:12px; cursor:pointer; display:none;
-  }
-  .card:hover .del{display:block}
 
-  /* Buttons & inputs */
   button.btn{
     padding:9px 16px; border:none; border-radius:6px; cursor:pointer; font-family:inherit;
     font-weight:500; background:var(--accent); color:#111;
   }
   button.btn.ghost{background:transparent; color:var(--text); border:1px solid var(--line)}
-  input{
-    flex:1 1 160px; padding:9px 10px; border-radius:6px; border:1px solid var(--line);
-    background:#0e1322; color:var(--text); font-family:inherit;
-  }
+  button.btn:disabled{opacity:.5; cursor:wait}
   .hint{font-size:13px; opacity:.6; text-align:center; margin-top:10px}
 
-  /* Results table */
   .table-wrap{overflow-x:auto; background:var(--panel); border:1px solid var(--line); border-radius:10px}
   table.dist{width:100%; border-collapse:collapse; font-size:14px}
   .dist th, .dist td{padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap}
@@ -101,12 +82,6 @@
   .legend{display:flex; gap:14px; font-size:13px; margin:0 0 8px}
   .legend i{display:inline-block; width:11px; height:11px; border-radius:2px; margin-right:5px; vertical-align:-1px}
 
-  /* Admin */
-  details.admin{margin-top:28px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px}
-  details.admin summary{cursor:pointer; font-weight:500}
-  .admin-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-
-  /* Toast */
   #toast{
     position:fixed; bottom:20px; left:50%; transform:translate(-50%,120px); z-index:99;
     background:#111827; border:1px solid var(--accent); padding:10px 18px; border-radius:8px; transition:transform .25s;
@@ -141,12 +116,9 @@
         <button class="btn" id="btnSubmit">Submit Vote</button>
       </div>
     </div>
-
     <section id="tiers"></section>
-
     <h2>Unranked</h2>
     <div id="pool" class="tier-drop" data-tier="pool"></div>
-
     <p class="hint">Drag &amp; drop cards into a tier — or on mobile, tap a card, then tap a tier.</p>
   </section>
 
@@ -159,7 +131,6 @@
         <button class="btn ghost" id="btnCsv">Export CSV</button>
       </div>
     </div>
-
     <section id="resultTiers"></section>
 
     <h2>Vote Breakdown</h2>
@@ -178,65 +149,52 @@
     </div>
     <p class="hint">Score: S = 5 · A = 4 · B = 3 · C = 2 · D = 1</p>
   </section>
-
-  <!-- ============ ADMIN ============ -->
-  <details class="admin">
-    <summary>Admin Panel</summary>
-    <div class="admin-row">
-      <input id="inKey" type="password" placeholder="Admin key">
-      <button class="btn ghost" id="btnUnlock">Unlock</button>
-    </div>
-    <div class="admin-row" id="adminTools" hidden>
-      <input id="inName" placeholder="Model name, e.g. Magneto">
-      <input id="inNo" placeholder="No., e.g. 13">
-      <input id="inImg" placeholder="Image URL (optional)">
-      <button class="btn" id="btnAdd">+ Add Model</button>
-    </div>
-    <p class="hint" id="adminHint" hidden>Admin mode: hover a card in “My Vote” and click ✕ to delete it (its votes are deleted too).</p>
-  </details>
 </main>
 
 <div id="toast"></div>
 
-<script>
-/* ===================== CONFIG & STATE ===================== */
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+/* ===================== CONFIG (EDIT THIS) ===================== */
+const SUPABASE_URL      = 'https://elqvkhfpepzrzzfqbbyl.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_fnzXW7XI7z_I1LBGlwj7pg_43Mu4VQQ';
+
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ===================== STATE ===================== */
 const TIERS = ['S','A','B','C','D'];
-const LS_DRAFT = 'blokees-rivals-draft-v2';
-const LS_VOTER = 'blokees-rivals-voter-id';
+const LS_DRAFT = 'blokees-rivals-draft-v3';
+const LS_VOTER = 'blokees-rivals-voter-uuid';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g,
   c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-const uuid = () => (crypto.randomUUID ? crypto.randomUUID()
-  : 'v-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 12));
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const uuid = () => crypto.randomUUID ? crypto.randomUUID()
+  : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+    });
 
 let voterId = localStorage.getItem(LS_VOTER);
-if (!voterId) { voterId = uuid(); localStorage.setItem(LS_VOTER, voterId); }
+if (!voterId || !UUID_RE.test(voterId)) { voterId = uuid(); localStorage.setItem(LS_VOTER, voterId); }
 
-let items = {};                 // id -> item
+let items = {};
 let placement = emptyPlacement();
 let selectedId = null;
 let results = [];
-let adminKey = sessionStorage.getItem('adminKey') || '';
 
 function emptyPlacement(){ const p = { pool:[] }; TIERS.forEach(t => p[t] = []); return p; }
 
 /* ===================== HELPERS ===================== */
-async function api(url, opts = {}){
-  const headers = { 'Content-Type':'application/json' };
-  if (adminKey) headers['x-admin-key'] = adminKey;
-  const res = await fetch(url, { ...opts, headers });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-  return data;
-}
-
 function toast(msg){
   const t = $('#toast'); t.textContent = msg; t.classList.add('show');
   clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2500);
 }
 const setStatus = msg => $('#status').textContent = msg;
+const toTier = a => a >= 4.5 ? 'S' : a >= 3.5 ? 'A' : a >= 2.5 ? 'B' : a >= 1.5 ? 'C' : 'D';
 
 function placeholder(name){
   const initials = name.split(/\s+/).map(w => w[0]).join('').slice(0,3).toUpperCase();
@@ -253,7 +211,6 @@ function makeCard(it, { interactive = true, stat = '' } = {}){
   el.dataset.id = it.id;
   el.draggable = interactive;
   el.innerHTML = `
-    ${interactive && adminKey ? '<button class="del" title="Delete">✕</button>' : ''}
     <img alt="${esc(it.name)}" referrerpolicy="no-referrer" loading="lazy">
     <div class="info"><div class="no">CC ${esc(it.no)}</div>${esc(it.name)}
       ${stat ? `<div class="stat">${stat}</div>` : ''}</div>`;
@@ -267,12 +224,10 @@ function makeCard(it, { interactive = true, stat = '' } = {}){
 function voteCard(id){
   const el = makeCard(items[id]);
   if (id === selectedId) el.classList.add('selected');
-
   el.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', id); el.classList.add('dragging'); });
   el.addEventListener('dragend', () => el.classList.remove('dragging'));
   el.addEventListener('click', e => {
     e.stopPropagation();
-    if (e.target.classList.contains('del')) return deleteItem(id);
     selectedId = (selectedId === id) ? null : id;
     renderVote();
   });
@@ -289,7 +244,6 @@ function renderVote(){
                      <div class="tier-drop" data-tier="${t}"></div>`;
     wrap.appendChild(row);
   });
-
   document.querySelectorAll('#view-vote .tier-drop').forEach(zone => {
     zone.innerHTML = '';
     placement[zone.dataset.tier].forEach(id => zone.appendChild(voteCard(id)));
@@ -301,7 +255,6 @@ function bindZone(zone){
   if (zone.dataset.bound) return;
   zone.dataset.bound = '1';
   const tier = zone.dataset.tier;
-
   zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
   zone.addEventListener('dragleave', () => zone.classList.remove('over'));
   zone.addEventListener('drop', e => {
@@ -320,43 +273,49 @@ function moveItem(id, toTier, beforeId = null){
   const idx = beforeId ? list.indexOf(beforeId) : -1;
   idx >= 0 ? list.splice(idx, 0, id) : list.push(id);
   selectedId = null;
-  saveDraft(true);
-  renderVote();
-}
-
-function saveDraft(dirty = false){
   localStorage.setItem(LS_DRAFT, JSON.stringify(placement));
-  if (dirty) setStatus('⚠ You have unsubmitted changes');
+  setStatus('⚠ You have unsubmitted changes');
+  renderVote();
 }
 
 $('#btnSubmit').addEventListener('click', async () => {
   const votes = {};
   TIERS.forEach(t => placement[t].forEach(id => votes[id] = t));
   if (!Object.keys(votes).length) return toast('Place at least one model in a tier first.');
-  try {
-    const r = await api('/api/vote', { method:'POST', body: JSON.stringify({ voterId, votes }) });
-    setStatus(`✓ Vote submitted (${r.count} model${r.count > 1 ? 's' : ''} ranked)`);
-    toast('Thanks for voting!');
-  } catch (err) { toast('Error: ' + err.message); }
+
+  const btn = $('#btnSubmit'); btn.disabled = true;
+  const { data, error } = await sb.rpc('submit_vote', { p_voter: voterId, p_votes: votes });
+  btn.disabled = false;
+
+  if (error) return toast('Error: ' + error.message);
+  setStatus(`✓ Vote submitted (${data} model${data > 1 ? 's' : ''} ranked)`);
+  toast('Thanks for voting!');
 });
 
 $('#btnClear').addEventListener('click', () => {
   if (!confirm('Move all models back to Unranked?')) return;
   TIERS.forEach(t => { placement.pool.push(...placement[t]); placement[t] = []; });
-  saveDraft(true); renderVote();
+  localStorage.setItem(LS_DRAFT, JSON.stringify(placement));
+  setStatus('⚠ You have unsubmitted changes');
+  renderVote();
 });
 
 document.body.addEventListener('click', () => { if (selectedId){ selectedId = null; renderVote(); } });
 
 /* ===================== RESULTS ===================== */
 async function loadResults(){
-  try {
-    const data = await api('/api/results');
-    results = data.items;
-    $('#resultsMeta').textContent =
-      `${data.totalVoters} voter${data.totalVoters === 1 ? '' : 's'} · updated ${new Date().toLocaleTimeString()}`;
-    renderResults();
-  } catch (err) { $('#resultsMeta').textContent = 'Could not load results: ' + err.message; }
+  $('#resultsMeta').textContent = 'Loading…';
+  const { data, error } = await sb.rpc('get_results');
+  if (error) { $('#resultsMeta').textContent = 'Could not load results: ' + error.message; return; }
+
+  results = (data.items || []).map(r => ({
+    ...r,
+    avg: r.avg ?? 0,
+    communityTier: r.total ? toTier(r.avg) : null,
+  }));
+  $('#resultsMeta').textContent =
+    `${data.totalVoters} voter${data.totalVoters === 1 ? '' : 's'} · updated ${new Date().toLocaleTimeString()}`;
+  renderResults();
 }
 
 function renderResults(){
@@ -415,78 +374,34 @@ document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () =>
   if (b.dataset.view === 'results') loadResults();
 }));
 
-/* ===================== ADMIN ===================== */
-async function unlock(key, silent = false){
-  adminKey = key;
-  try {
-    await api('/api/admin/check');
-    sessionStorage.setItem('adminKey', key);
-    $('#adminTools').hidden = $('#adminHint').hidden = false;
-    if (!silent) toast('Admin mode enabled');
-  } catch {
-    adminKey = '';
-    sessionStorage.removeItem('adminKey');
-    $('#adminTools').hidden = $('#adminHint').hidden = true;
-    if (!silent) toast('Invalid admin key');
-  }
-  renderVote();
-}
-$('#btnUnlock').addEventListener('click', () => unlock($('#inKey').value.trim()));
-
-$('#btnAdd').addEventListener('click', async () => {
-  const name = $('#inName').value.trim();
-  if (!name) return toast('Please enter a model name');
-  try {
-    const it = await api('/api/items', { method:'POST',
-      body: JSON.stringify({ name, no: $('#inNo').value.trim(), img: $('#inImg').value.trim() }) });
-    items[it.id] = it;
-    placement.pool.push(it.id);
-    saveDraft(); renderVote();
-    ['#inName','#inNo','#inImg'].forEach(s => $(s).value = '');
-    toast(`Added ${it.name}`);
-  } catch (err) { toast('Error: ' + err.message); }
-});
-
-async function deleteItem(id){
-  if (!confirm(`Delete "${items[id].name}" and all of its votes?`)) return;
-  try {
-    await api('/api/items/' + encodeURIComponent(id), { method:'DELETE' });
-    delete items[id];
-    Object.keys(placement).forEach(k => placement[k] = placement[k].filter(x => x !== id));
-    saveDraft(); renderVote();
-    toast('Model deleted');
-  } catch (err) { toast('Error: ' + err.message); }
-}
-
 /* ===================== INIT ===================== */
 async function init(){
-  try {
-    const [list, mine] = await Promise.all([api('/api/items'), api('/api/votes/' + voterId)]);
-    items = Object.fromEntries(list.map(i => [i.id, i]));
+  const [itemsRes, mineRes] = await Promise.all([
+    sb.from('items').select('id, name, no, img').order('sort').order('no'),
+    sb.rpc('get_my_votes', { p_voter: voterId }),
+  ]);
+  if (itemsRes.error) return setStatus('Cannot connect to database: ' + itemsRes.error.message);
 
-    // Use local draft if exists, otherwise rebuild from saved server vote
-    let base = JSON.parse(localStorage.getItem(LS_DRAFT) || 'null');
-    if (!base){
-      base = emptyPlacement();
-      Object.entries(mine).forEach(([id, t]) => base[t] && base[t].push(id));
-    }
+  items = Object.fromEntries(itemsRes.data.map(i => [i.id, i]));
+  const mine = mineRes.data || [];
 
-    // Sanitize: drop unknown IDs, add new models to Unranked
-    placement = emptyPlacement();
-    const seen = new Set();
-    [...TIERS, 'pool'].forEach(k => (base[k] || []).forEach(id => {
-      if (items[id] && !seen.has(id)) { placement[k].push(id); seen.add(id); }
-    }));
-    Object.keys(items).forEach(id => { if (!seen.has(id)) placement.pool.push(id); });
-
-    setStatus(Object.keys(mine).length
-      ? '✓ Your vote is saved — you can change it and submit again'
-      : "You haven't voted yet");
-    renderVote();
-    if (adminKey) unlock(adminKey, true);
-  } catch (err) {
-    setStatus('Cannot connect to server: ' + err.message);
+  let base = JSON.parse(localStorage.getItem(LS_DRAFT) || 'null');
+  if (!base){
+    base = emptyPlacement();
+    mine.forEach(v => base[v.tier] && base[v.tier].push(v.item_id));
   }
+
+  placement = emptyPlacement();
+  const seen = new Set();
+  [...TIERS, 'pool'].forEach(k => (base[k] || []).forEach(id => {
+    if (items[id] && !seen.has(id)) { placement[k].push(id); seen.add(id); }
+  }));
+  Object.keys(items).forEach(id => { if (!seen.has(id)) placement.pool.push(id); });
+
+  setStatus(mine.length
+    ? '✓ Your vote is saved — you can change it and submit again'
+    : "You haven't voted yet");
+  renderVote();
 }
 init();
 </script>
